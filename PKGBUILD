@@ -1,29 +1,29 @@
 # Maintainer: Slash <demodevil5[at]yahoo[dot]com>
 
 pkgname=ezquake
-pkgver=3.6.4
-pkgrel=2
+pkgver=3.6.5
+pkgrel=1
 pkgdesc="One of the most Popular QuakeWorld clients for Linux/BSD/OSX/Win32. You need the retail pak files to play."
 url="https://www.ezquake.com/"
 license=('GPL-2.0-only')
-depends=('curl' 'expat' 'jansson' 'libjpeg-turbo' 'libpng' 'minizip' 'openssl' 'sdl2' 'speex')
-makedepends=('unzip' 'vim')
+depends=('curl' 'expat' 'jansson' 'libjpeg-turbo' 'libpng' 'minizip' 'openssl' 'sdl2' 'speex' 'speexdsp' 'libsndfile' 'pcre2' 'freetype2')
+makedepends=('cmake' 'ninja')
 conflicts=('ezquake-git' 'fuhquake')
 provides=('quake' 'fuhquake')
 arch=('x86_64')
 install=ezquake.install
-source=("https://github.com/QW-Group/ezquake-source/releases/download/${pkgver}/ezquake-source_with-submodules-${pkgver}.zip"
+source=("https://github.com/QW-Group/ezquake-source/releases/download/${pkgver}/ezquake-source_with-submodules-${pkgver}.tar.gz"
 'https://github.com/QW-Group/ezquake-source/releases/download/3.2.3/ezquake-ubuntu-3.2.3-full.tar.gz'
 'ezquake.launcher' 'ezquake.desktop' 'ezquake.ico')
 noextract=("ezquake-ubuntu-3.2.3-full.tar.gz")
-sha256sums=('925d26b6441dc2bdb69307b9616a6b4a4647aa1c9443134daabf20433e848848'
-            'd58f26ed912166615420f0d0b208a10fd2539a84b90e85edfcb1aedc94615af5'
-            'aa59da4a296a43af8ea8c5670cef5980a15407124b3e53f3cf805ceb6126e6ed'
-            'e92b9cdeac5eadced50a6167eb53b1343b0772d3bf8afa310eb281b88bf7e677'
-            '2a6a5484ddb4cfaf8518b51df39ffd1fa8ce768402eab6401415bececb8e8ab2')
+b2sums=('86ea89354db3ed29787b5d1513719d0807c0198aa0599320bb9d15c6364a529571293f51454adfae2dc325d71a93824246e2da720545e5ad9e2e7dee15e5f2da'
+        '98840842ea783d6fe99081425fddc69cb5a1009ac43bbe8815f6ee6fe3365a8ea08b75dff9e48f6eda9d47c50b45bba53e879c8b0f63a949170c0b1e419710ae'
+        '2913e1a5cd3beed9858ba5762b6da170fc4ddc7ce429d78d029d8b45d17b9860144a15835742822f955d45329679ec1e9d99543dd130148c6d1abc46f7321d5c'
+        '1e1519b43c9ff3d71c0e71f679a02201848e0ffae7d668e20917ecd71c3007fe4b2b0b17edcb65e9d6f7780a97257fafcf3363e4d576249dd3afd592fb053a78'
+        '45640963258bd9abc7230229b2bbd2fb62ebc09650bd58371f2bb74168f6346d8ead508b8c7d92bc1960b8ed9bf6f922c2036e93ad9a2cd1551ce9d32dcbb425')
 
 prepare() {
-    cd "${srcdir}/ezquake-source-${pkgver}/"
+    cd "${srcdir}/ezquake-${pkgver}/"
 
     # pcre2 fix
     # @see https://github.com/QW-Group/ezquake-source/issues/916
@@ -31,10 +31,11 @@ prepare() {
 }
 
 build() {
-    cd "${srcdir}/ezquake-source-${pkgver}/"
+    cd "${srcdir}/ezquake-${pkgver}/"
 
-    # Compile ezquake
-    make
+    # Commands from upstream build-linux.sh
+    cmake --preset dynamic
+    cmake --build build-dynamic --config Release
 }
 
 package() {
@@ -51,7 +52,7 @@ package() {
     find "${pkgdir}/opt/quake" -type f -exec chmod 0644 "{}" \;
 
     # Overwrite packaged binary with compiled one
-    mv -v "${srcdir}/ezquake-source-${pkgver}/ezquake-linux-x86_64" \
+    mv -v "${srcdir}/ezquake-${pkgver}/ezquake-linux-x86_64" \
         "${pkgdir}/opt/quake/"
 
     # Make id1 Directory for pak0.pak and pak1.pak files

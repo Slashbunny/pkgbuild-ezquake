@@ -2,4 +2,4 @@ src/
 pkg/
 *.pkg.tar.zst
 ezquake-ubuntu-*-full.tar.gz
-*.zip
+*.tar.gz
