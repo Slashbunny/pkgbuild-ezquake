@@ -1,10 +1,10 @@
 # Maintainer: Slash <demodevil5[at]yahoo[dot]com>
 
 pkgname=ezquake
-pkgver=3.6.6
+pkgver=3.6.9
 pkgrel=1
 pkgdesc="One of the most Popular QuakeWorld clients for Linux/BSD/OSX/Win32. You need the retail pak files to play."
-url="https://www.ezquake.com/"
+url="https://ezquake.com/"
 license=('GPL-2.0-only')
 depends=('curl' 'expat' 'jansson' 'libjpeg-turbo' 'libpng' 'minizip' 'openssl' 'sdl2' 'speex' 'speexdsp' 'libsndfile' 'pcre2' 'freetype2')
 makedepends=('cmake' 'ninja')
@@ -16,7 +16,7 @@ source=("https://github.com/QW-Group/ezquake-source/releases/download/${pkgver}/
 'https://github.com/QW-Group/ezquake-source/releases/download/3.2.3/ezquake-ubuntu-3.2.3-full.tar.gz'
 'ezquake.launcher' 'ezquake.desktop' 'ezquake.ico')
 noextract=("ezquake-ubuntu-3.2.3-full.tar.gz")
-b2sums=('06d9fd823fbad82adfeaabc43237829dfd43440e9e94bfe894f397c047127ce0730a4367d3ec590c046d4d11e71ac3a47f02b213a0af42048af719754d7f9103'
+b2sums=('295bab572c927cf5819203f800320b15fe7a77511355b3c12b4c50f0396620a5e7249941078bc663500bc999a943bcc811015fe6be96da7e1b96a8d11c06a569'
         '98840842ea783d6fe99081425fddc69cb5a1009ac43bbe8815f6ee6fe3365a8ea08b75dff9e48f6eda9d47c50b45bba53e879c8b0f63a949170c0b1e419710ae'
         '2913e1a5cd3beed9858ba5762b6da170fc4ddc7ce429d78d029d8b45d17b9860144a15835742822f955d45329679ec1e9d99543dd130148c6d1abc46f7321d5c'
         '1e1519b43c9ff3d71c0e71f679a02201848e0ffae7d668e20917ecd71c3007fe4b2b0b17edcb65e9d6f7780a97257fafcf3363e4d576249dd3afd592fb053a78'
@@ -26,7 +26,7 @@ build() {
     cd "${srcdir}/ezquake-source-${pkgver}/"
 
     # Commands from upstream build-linux.sh
-    cmake --preset dynamic
+    cmake --preset dynamic -DCMAKE_C_FLAGS="-I/usr/include/minizip"
     cmake --build build-dynamic --config Release
 }
 
