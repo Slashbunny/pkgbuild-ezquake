@@ -1,0 +1,4 @@
+[ezquake]
+source = "github"
+github = "QW-Group/ezquake-source"
+use_latest_release = true
